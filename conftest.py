@@ -54,8 +54,8 @@ def _capture_screenshot():
 
 @pytest.mark.optionalhook
 def pytest_html_results_summary(prefix):
-    prefix.extend([html.p("所属部门: PA")])
-    prefix.extend([html.p("测试人员: Liuya")])
+    prefix.extend([html.p("Department: QA")])
+    prefix.extend([html.p("Testers: joke")])
 
 
 @pytest.fixture(scope='module')

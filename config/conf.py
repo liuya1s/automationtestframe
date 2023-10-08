@@ -16,5 +16,5 @@ CONF_PATH = os.path.join(ROOT_DIR, 'config', 'config.ini')
 CURRENT_TIME = datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
 
 # Report name
-REPORT_NAME_WITH_ABSOLUTE_PATH = os.path.join(REPORT_DIR, 'iBMC-Report{}.html'.format(CURRENT_TIME))
+REPORT_NAME_WITH_ABSOLUTE_PATH = os.path.join(REPORT_DIR, 'TEST-Report{}.html'.format(CURRENT_TIME))
 
