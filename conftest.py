@@ -57,13 +57,16 @@ def pytest_html_results_summary(prefix):
     prefix.extend([html.p("Department: QA")])
     prefix.extend([html.p("Testers: joke")])
 
+@pytest.fixture(scope='session')
+def global_cfg():
+    gcfg = ParseConFile(CONF_PATH)
+    yield gcfg
 
 @pytest.fixture(scope='module')
-def driver():
-    global_cfg =  ParseConFile(CONF_PATH)
+def driver(global_cfg):
     browswer_type = global_cfg.get_str_value(section='WEB UI', option='browser')
     global _driver
-    print('------------open browser------------')
+    print('=============== Open browser ===============')
     if browswer_type == 'Edge':
         options = webdriver.EdgeOptions()
         options.add_argument('--ignore-certificate-errors')
@@ -91,5 +94,5 @@ def driver():
     _driver.maximize_window()
 
     yield _driver
-    print('------------close browser------------')
+    print('=============== Close browser ===============')
     _driver.quit()

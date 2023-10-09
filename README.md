@@ -26,9 +26,22 @@ The navigation bar is a special existence, its purpose is to guide you to other 
 
 ### conftest.py
 Level 1 conftest.py.
-
+1. Set pytest-html plugin-in hook.
+2. Load global configuration file
+3. Initialize web driver
 ### run_test_cases.py
 
 ###  others
 - pytest.ini
 - requirement.txt'
+
+## How to use 
+### Execute locally or in a virtual environment 
+1. git clone https://github.com/liuya1s/automationtestframe.git
+2. pip install -r requirement.txt
+3. Add your functions or test cases in each module
+4. Execute python run_test_cases.py
+
+### Execute in docker
+please wait.
+
