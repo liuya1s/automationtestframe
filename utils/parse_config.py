@@ -47,3 +47,14 @@ class ParseConFile(object):
             return dict(self.conf.items(section))
         except configparser.NoSectionError as e:
             print(e)
+
+    def get_by_and_locator_value(self, section, option):
+        try:
+            locator = self.conf.get(section=section, option=option)
+            if "->" in locator:
+                locator = tuple(locator.split("->"))
+                return locator
+        except configparser.NoSectionError as e:
+            print(f"Error: no section {section}!")
+        except configparser.NoOptionError as e:
+            print(f"Error: no option {option}!")

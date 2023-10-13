@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
-
+import os
 import pytest
+import time
+import logging
 from selenium import webdriver
 from py._xmlgen import html
 from utils.parse_config import ParseConFile
-from page.base_page import BasePage
 from config.conf import CONF_PATH
+from config.conf import LOG_FOLDER
 
+
+_driver = None
 
 @pytest.mark.hookwrapper
 def pytest_runtest_makereport(item):
@@ -65,6 +69,7 @@ def global_cfg():
 @pytest.fixture(scope='module')
 def driver(global_cfg):
     browswer_type = global_cfg.get_str_value(section='WEB UI', option='browser')
+    
     global _driver
     print('=============== Open browser ===============')
     if browswer_type == 'Edge':
@@ -72,11 +77,10 @@ def driver(global_cfg):
         options.add_argument('--ignore-certificate-errors')
     
         _driver = webdriver.Edge(options=options)
-        base_page = BasePage(_driver, 31)
-        
+    
         # Close the personalized pop-pup box in the upper right corner.
-        base_page.force_wait(5)
-        base_page.browser_refresh()
+        time.sleep(5)
+        _driver.refresh()
 
     elif browswer_type == "Chrome":
         options = webdriver.ChromeOptions()
@@ -96,3 +100,37 @@ def driver(global_cfg):
     yield _driver
     print('=============== Close browser ===============')
     _driver.quit()
+
+
+@pytest.fixture(scope='class', autouse=True)
+def mylog(request, global_cfg):
+    module_name = request.node.nodeid
+    logger = logging.getLogger(module_name)
+    level = global_cfg.get_str_value("LOG", "level")
+    if level == "INFO":
+        logger.setLevel(logging.INFO)
+    elif level == "DEBUG":
+        logger.setLevel(logging.DEBUG)
+    elif level == "WARNING":
+        logger.setLevel(logging.WARNING)
+    elif level == "ERROR":
+        logger.setLevel(logging.ERROR)
+    else:
+        logger.setLevel(logging.DEBUG)
+    
+    print(module_name)
+
+    strings1 = module_name.split("/")
+    strings2 = ".".join(strings1)
+    log_name = strings2.split("::")
+    new_log_name = ".".join(log_name)
+
+    log_file = os.path.join(LOG_FOLDER, f"{new_log_name}.log")
+    file_handler = logging.FileHandler(log_file)
+
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+
+    yield logger
+    file_handler.close()

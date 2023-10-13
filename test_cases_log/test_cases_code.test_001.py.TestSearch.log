@@ -1,0 +1,3 @@
+2023-10-13 09:22:43,500 - test_cases_code/test_001.py::TestSearch - INFO - google_search1
+2023-10-13 09:22:43,500 - test_cases_code/test_001.py::TestSearch - ERROR - google_search2
+2023-10-13 09:22:43,500 - test_cases_code/test_001.py::TestSearch - WARNING - google_search3
